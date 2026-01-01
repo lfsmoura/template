@@ -3,8 +3,7 @@
   "include": ["src"],
   "compilerOptions": {
     "jsx": "react-jsx",
-    "types": ["vite/client"],
-    "baseUrl": ".",
+    "types": ["vite/client", "node", "bun"],
     "paths": {
       "@/*": ["./src/*"]
     }

@@ -7,6 +7,9 @@
     "./setup-counter": "./utils/counter.ts"
   },
   "license": "MIT",
+  "scripts": {
+    "typecheck": "tsgo"
+  },
   "devDependencies": {
     "@repo/typescript-config": "*",
     "typescript": "5.5.4"

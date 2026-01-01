@@ -15,9 +15,14 @@ const loggedServerFunction = createServerFn({ method: "GET" }).middleware([
 ]);
 */
 
+type Todo = {
+  id: number;
+  name: string;
+};
+
 const TODOS_FILE = "todos.json";
 
-async function readTodos() {
+async function readTodos(): Promise<Todo[]> {
   return JSON.parse(
     await fs.promises.readFile(TODOS_FILE, "utf-8").catch(() =>
       JSON.stringify(
@@ -73,7 +78,7 @@ function Home() {
       <div className="w-full max-w-2xl p-8 rounded-xl backdrop-blur-md bg-black/50 shadow-xl border-8 border-black/10">
         <h1 className="text-2xl mb-4">Start Server Functions - Todo Example</h1>
         <ul className="mb-4 space-y-2">
-          {todos?.map((t) => (
+          {todos?.map((t: Todo) => (
             <li
               key={t.id}
               className="bg-white/10 border border-white/20 rounded-lg p-3 backdrop-blur-sm shadow-md"
