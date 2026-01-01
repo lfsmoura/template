@@ -1,33 +1,43 @@
-# `Turborepo` Vite starter
+# Turborepo + TanStack Start Template
 
-This is a community-maintained example. If you experience a problem, please submit a pull request with a fix. GitHub Issues will be closed.
+A monorepo template using Turborepo, Bun, and Biome.
 
-## Using this example
-
-Run the following command:
+## Getting Started
 
 ```sh
-npx create-turbo@latest -e with-vite
+bun install
+bun run dev
 ```
 
 ## What's inside?
 
-This Turborepo includes the following packages and apps:
+### Apps (`apps/`)
 
-### Apps and Packages
+- **web**: [TanStack Start](https://tanstack.com/start) app with React, TailwindCSS, and file-based routing
+- **docs**: Vanilla [Vite](https://vitejs.dev) + TypeScript app
 
-- `docs`: a vanilla [vite](https://vitejs.dev) ts app
-- `web`: another vanilla [vite](https://vitejs.dev) ts app
-- `@repo/ui`: a stub component & utility library shared by both `web` and `docs` applications
-- `@repo/eslint-config`: shared `eslint` configurations
-- `@repo/typescript-config`: `tsconfig.json`s used throughout the monorepo
+### Packages (`packages/`)
+
+- **@repo/ui**: Shared component library consumed by apps
+- **@repo/typescript-config**: Shared TypeScript configs (`base.json` for libraries, `vite.json` for apps)
 
 Each package and app is 100% [TypeScript](https://www.typescriptlang.org/).
 
-### Utilities
+## Commands
 
-This Turborepo has some additional tools already setup for you:
+```bash
+bun install          # Install dependencies
+bun run dev          # Start dev servers for all apps
+bun run build        # Build all packages
+bun run typecheck    # Type check with tsgo (TypeScript native)
+bun run lint         # Biome lint and format check
+bun run lint:fix     # Biome lint and format with auto-fix
+bun run format       # Biome format only
+```
+
+## Utilities
 
 - [TypeScript](https://www.typescriptlang.org/) for static type checking
-- [ESLint](https://eslint.org/) for code linting
-- [Prettier](https://prettier.io) for code formatting
+- [tsgo](https://github.com/nicolo-ribaudo/tsgo) (TypeScript native) for fast type checking
+- [Biome](https://biomejs.dev/) for linting and formatting
+- [Turborepo](https://turbo.build/) for monorepo orchestration

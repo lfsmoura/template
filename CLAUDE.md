@@ -6,8 +6,9 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ```bash
 bun install          # Install dependencies
-bun run build        # Build all packages (TypeScript check + Vite build)
+bun run build        # Build all packages
 bun run dev          # Start dev servers for all apps concurrently
+bun run typecheck    # Type check with tsgo (TypeScript native preview)
 bun run lint         # Biome lint and format check
 bun run lint:fix     # Biome lint and format with auto-fix
 bun run format       # Biome format only
@@ -19,7 +20,8 @@ This is a Turborepo monorepo using Bun as the package manager.
 
 ### Apps (`apps/`)
 
-- **web**, **docs**: Vanilla Vite + TypeScript apps. Both consume `@repo/ui` for shared components. Build outputs to `dist/`.
+- **web**: TanStack Start app with React, TailwindCSS, and file-based routing. Uses `@tanstack/react-router` for routing with auto-generated route tree.
+- **docs**: Vanilla Vite + TypeScript app. Consumes `@repo/ui` for shared components.
 
 ### Packages (`packages/`)
 
@@ -29,3 +31,9 @@ This is a Turborepo monorepo using Bun as the package manager.
 ### Build Pipeline
 
 Turbo orchestrates builds with dependency-aware caching. The `build` task depends on upstream package builds (`^build`). Dev servers run in persistent watch mode without caching.
+
+### Tooling
+
+- **Biome**: Used for linting and formatting (replaces ESLint + Prettier). Config in `biome.json`.
+- **tsgo**: TypeScript native preview compiler for fast type checking. Run via `bun run typecheck`.
+- **TanStack Router**: File-based routing in `apps/web/src/routes/`. Route tree is auto-generated to `routeTree.gen.ts`.
