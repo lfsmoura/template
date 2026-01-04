@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 
-function getNames() {
+async function getNames() {
   return fetch("/demo/api/names").then(
     (res) => res.json() as Promise<string[]>,
   );
