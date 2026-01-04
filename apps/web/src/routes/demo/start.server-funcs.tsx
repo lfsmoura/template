@@ -3,6 +3,8 @@ import { useForm } from "@tanstack/react-form";
 import { createFileRoute, useRouter } from "@tanstack/react-router";
 import { createServerFn } from "@tanstack/react-start";
 import { Schema } from "effect";
+import { FormField } from "@/components/form/form-field";
+import { Button } from "@/components/ui/button";
 
 /*
 const loggingMiddleware = createMiddleware().server(
@@ -103,39 +105,24 @@ function Home() {
             e.preventDefault();
             form.handleSubmit();
           }}
-          className="flex flex-col gap-2"
+          className="flex flex-col gap-3"
         >
           <form.Field name="name">
             {(field) => (
-              <div className="flex flex-col gap-1">
-                <input
-                  type="text"
-                  value={field.state.value}
-                  onChange={(e) => field.handleChange(e.target.value)}
-                  onBlur={field.handleBlur}
-                  placeholder="Enter a new todo..."
-                  className="w-full px-4 py-3 rounded-lg border border-white/20 bg-white/10 backdrop-blur-sm text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent"
-                />
-                {field.state.meta.errors.length > 0 && (
-                  <span className="text-red-400 text-sm">
-                    {field.state.meta.errors[0]?.message ??
-                      String(field.state.meta.errors[0])}
-                  </span>
-                )}
-              </div>
+              <FormField field={field} placeholder="Enter a new todo..." />
             )}
           </form.Field>
           <form.Subscribe
             selector={(state) => [state.canSubmit, state.isSubmitting]}
           >
             {([canSubmit, isSubmitting]) => (
-              <button
+              <Button
                 type="submit"
                 disabled={!canSubmit || isSubmitting}
-                className="bg-blue-500 hover:bg-blue-600 disabled:bg-blue-500/50 disabled:cursor-not-allowed text-white font-bold py-3 px-4 rounded-lg transition-colors"
+                className="w-full"
               >
                 {isSubmitting ? "Adding..." : "Add todo"}
-              </button>
+              </Button>
             )}
           </form.Subscribe>
         </form>
