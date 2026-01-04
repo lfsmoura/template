@@ -33,6 +33,7 @@
   },
   "devDependencies": {
     "@repo/typescript-config": "workspace:*",
+    "@repo/vite-console-log": "workspace:*",
     "@tanstack/devtools-vite": "^0.3.11",
     "@testing-library/dom": "^10.4.0",
     "@testing-library/react": "^16.2.0",

@@ -1,3 +1,4 @@
+import { consoleLog } from "@repo/vite-console-log";
 import tailwindcss from "@tailwindcss/vite";
 import { devtools } from "@tanstack/devtools-vite";
 import { tanstackStart } from "@tanstack/react-start/plugin/vite";
@@ -10,10 +11,10 @@ const config = defineConfig({
   plugins: [
     devtools(),
     nitro(),
-    // this is the plugin that enables path aliases
     viteTsConfigPaths({
       projects: ["./tsconfig.json"],
     }),
+    consoleLog(),
     tailwindcss(),
     tanstackStart(),
     viteReact(),

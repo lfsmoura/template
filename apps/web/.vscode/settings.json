@@ -7,5 +7,7 @@
   },
   "files.readonlyInclude": {
     "**/routeTree.gen.ts": true
-  }
+  },
+  "typescript.tsdk": "node_modules/tsgo/dist/typescript",
+  "typescript.enablePromptUseWorkspaceTsdk": true
 }
