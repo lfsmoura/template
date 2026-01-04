@@ -1,7 +1,8 @@
 import fs from "node:fs";
+import { useForm } from "@tanstack/react-form";
 import { createFileRoute, useRouter } from "@tanstack/react-router";
 import { createServerFn } from "@tanstack/react-start";
-import { useCallback, useState } from "react";
+import { Schema } from "effect";
 
 /*
 const loggingMiddleware = createMiddleware().server(
@@ -50,6 +51,12 @@ const addTodo = createServerFn({ method: "POST" })
     return todos;
   });
 
+const todoSchema = Schema.Struct({
+  name: Schema.String.pipe(
+    Schema.minLength(1, { message: () => "Todo name is required" }),
+  ),
+});
+
 export const Route = createFileRoute("/demo/start/server-funcs")({
   component: Home,
   loader: async () => await getTodos(),
@@ -59,13 +66,17 @@ function Home() {
   const router = useRouter();
   const todos = Route.useLoaderData();
 
-  const [todo, setTodo] = useState("");
-
-  const submitTodo = useCallback(async () => {
-    await addTodo({ data: todo });
-    setTodo("");
-    router.invalidate();
-  }, [todo, router]);
+  const form = useForm({
+    defaultValues: { name: "" },
+    validators: {
+      onChange: Schema.standardSchemaV1(todoSchema),
+    },
+    onSubmit: async ({ value }) => {
+      await addTodo({ data: value.name });
+      form.reset();
+      router.invalidate();
+    },
+  });
 
   return (
     <div
@@ -87,28 +98,47 @@ function Home() {
             </li>
           ))}
         </ul>
-        <div className="flex flex-col gap-2">
-          <input
-            type="text"
-            value={todo}
-            onChange={(e) => setTodo(e.target.value)}
-            onKeyDown={(e) => {
-              if (e.key === "Enter") {
-                submitTodo();
-              }
-            }}
-            placeholder="Enter a new todo..."
-            className="w-full px-4 py-3 rounded-lg border border-white/20 bg-white/10 backdrop-blur-sm text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent"
-          />
-          <button
-            type="button"
-            disabled={todo.trim().length === 0}
-            onClick={submitTodo}
-            className="bg-blue-500 hover:bg-blue-600 disabled:bg-blue-500/50 disabled:cursor-not-allowed text-white font-bold py-3 px-4 rounded-lg transition-colors"
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            form.handleSubmit();
+          }}
+          className="flex flex-col gap-2"
+        >
+          <form.Field name="name">
+            {(field) => (
+              <div className="flex flex-col gap-1">
+                <input
+                  type="text"
+                  value={field.state.value}
+                  onChange={(e) => field.handleChange(e.target.value)}
+                  onBlur={field.handleBlur}
+                  placeholder="Enter a new todo..."
+                  className="w-full px-4 py-3 rounded-lg border border-white/20 bg-white/10 backdrop-blur-sm text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent"
+                />
+                {field.state.meta.errors.length > 0 && (
+                  <span className="text-red-400 text-sm">
+                    {field.state.meta.errors[0]?.message ??
+                      String(field.state.meta.errors[0])}
+                  </span>
+                )}
+              </div>
+            )}
+          </form.Field>
+          <form.Subscribe
+            selector={(state) => [state.canSubmit, state.isSubmitting]}
           >
-            Add todo
-          </button>
-        </div>
+            {([canSubmit, isSubmitting]) => (
+              <button
+                type="submit"
+                disabled={!canSubmit || isSubmitting}
+                className="bg-blue-500 hover:bg-blue-600 disabled:bg-blue-500/50 disabled:cursor-not-allowed text-white font-bold py-3 px-4 rounded-lg transition-colors"
+              >
+                {isSubmitting ? "Adding..." : "Add todo"}
+              </button>
+            )}
+          </form.Subscribe>
+        </form>
       </div>
     </div>
   );
